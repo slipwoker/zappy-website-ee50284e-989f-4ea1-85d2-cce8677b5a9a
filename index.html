@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Wear Your Faith Like Armor — Holy Drip Co.</title>
+    <meta name="description" content="Holy Drip Co. is the Christian apparel brand built for the bold. Premium streetwear fused with faith — shop the movement and set apart style today.">
+    <meta name="keywords" content="Christian apparel, Set apart style, Christian streetwear, faith-based fashion, Holy Drip Co.">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'ee50284e-989f-4ea1-85d2-cce8677b5a9a',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="Wear Your Faith Like Armor — Holy Drip Co.">
+    <meta property="og:description" content="Holy Drip Co. is the Christian apparel brand built for the bold. Premium streetwear fused with faith — shop the movement and set apart style today.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Wear Your Faith Like Armor — Holy Drip Co.">
+    <meta name="twitter:description" content="Holy Drip Co. is the Christian apparel brand built for the bold. Premium streetwear fused with faith — shop the movement and set apart style today.">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .skip-link { position: absolute; top: 0; left: 0; transform: translateY(-200%); padding: 12px 18px; background: var(--bg-dark, #1a1a1a); color: var(--text-light, #fff); font-weight: 600; border-radius: 0 0 8px 0; z-index: 10000; }
+    .skip-link:focus { transform: none; outline: 2px solid var(--ring, #fff); outline-offset: 2px; }
+    :focus-visible { outline: 2px solid var(--ring, currentColor); outline-offset: 3px; }
+  </style>
+
+
+  
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-light) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-light) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-light) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="Search products..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "ee50284e-989f-4ea1-85d2-cce8677b5a9a";window.ZAPPY_API_BASE = "https://api.zappy5.com";</script><a class="skip-link" href="#main">Skip to main content</a>
+  <nav class="navbar">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link"><img class="logo" src="/assets/site-home-image-1.webp" alt="Holy Drip Co."></a>
+    </div>
+
+    <ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/en/products">
+        Products
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/en/products">All Courses</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/">Home</a></li><li><a href="/brand-story">Brand Story</a></li><li><a href="/campaigns">Campaigns</a></li><li><a href="/community">Community</a></li><li><a href="/contact">Contact</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="Login"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="Cart"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="Search products..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="Search">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div>
+
+    
+  </div>
+</nav>
+
+    <nav class="zappy-catalog-menu ltr" id="zappy-catalog-menu" dir="ltr" style="display:none">
+      <div class="catalog-menu-container">
+        <a href="/en/products" class="catalog-menu-item catalog-menu-all">All Courses</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .navbar,
+          nav.navbar {
+            min-height: 70px !important;
+          }
+
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
+            transform: none !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+          }
+
+          html[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          body[data-zappy-site-type="ecommerce"] .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] header .phone-header-btn,
+          html[data-zappy-site-type="ecommerce"] nav .phone-header-btn {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            overflow: hidden !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '0', 'important');
+          mobileToggle.style.setProperty('bottom', '0', 'important');
+          mobileToggle.style.setProperty('margin-top', 'auto', 'important');
+          mobileToggle.style.setProperty('margin-bottom', 'auto', 'important');
+          mobileToggle.style.setProperty('transform', 'none', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '0', 'important');
+          phoneBtn.style.setProperty('bottom', '0', 'important');
+          phoneBtn.style.setProperty('margin-top', 'auto', 'important');
+          phoneBtn.style.setProperty('margin-bottom', 'auto', 'important');
+          phoneBtn.style.setProperty('transform', 'none', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu handler (shared by click and touchend)
+    function handleToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+      const closeIcon = newToggle.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    }
+    
+    // Use click for desktop/emulation and touchend as iOS Safari fallback.
+    // Prevent double-fire with a timestamp guard.
+    var lastToggleTime = 0;
+    function guardedToggle(e) {
+      var now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
+      handleToggle(e);
+    }
+    
+    newToggle.addEventListener('click', guardedToggle);
+    newToggle.addEventListener('touchend', guardedToggle);
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main id="main">
+    <section data-band-index="0" class="home-hero-section" data-layout-spec="Home-hero" data-hero-type="fullscreen-scrim">
+  <!-- Background Image -->
+  <div class="home-hero-bg">
+    <img loading="eager" fetchpriority="high" data-hero-bg="true" data-placeholder="home-hero-image-1" data-context="Cinematic full-bleed fashion photography for Holy Drip Co. Christian streetwear brand: a young Black male model wearing premium oversized dark hoodie with subtle cross graphic, standing in a moody rain-slicked urban alley at night. Dramatic beam lighting from above creates a heavenly spotlight effect. Soft purple-violet atmospheric haze, rain sheen on wet pavement, wisps of smoke at ground level. High-fashion editorial quality, dark cinematic color grade with deep blacks and luminous violet highlights. Shot from slight low angle to convey power and purpose. Background: dark brick wall with faint graffiti. The overall mood is prophetic, elevated, spiritual warfare meets luxury streetwear." width="1440" height="900" src="/assets/site-home-hero-image-1.webp" alt="Holy Drip Co. faith-driven Christian streetwear model in cinematic urban night setting">
+  </div>
+
+  <!-- Scrim Overlay -->
+  <div class="home-hero-scrim" aria-hidden="true"></div>
+
+  <!-- Decorative: Lightning Glow Burst -->
+  <div class="home-hero-glow" aria-hidden="true"></div>
+
+  <!-- Decorative: Cross Watermark -->
+  <svg class="home-hero-cross-watermark" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="85" y="0" width="30" height="280" fill="white" opacity="0.04"></rect>
+    <rect x="0" y="80" width="200" height="30" fill="white" opacity="0.04"></rect>
+  </svg>
+
+  <!-- Hero Content -->
+  <div class="home-hero-content">
+    <div class="home-hero-inner">
+
+      <!-- Scripture Micro-Label -->
+      <div class="home-hero-scripture-label">
+        <span class="home-hero-scripture-ref">2 COR. 5:7</span>
+        <span class="home-hero-scripture-divider" aria-hidden="true"></span>
+        <span class="home-hero-scripture-text">Walk By Faith, Not By Sight</span>
+      </div>
+
+      <!-- H1 -->
+      <h1 class="home-hero-headline">
+        Faith Isn’t Just<br>
+        <span class="home-hero-headline-accent">Worn.</span> It’s Lived.
+      </h1>
+
+      <!-- Supporting Subtitle -->
+      <h3 class="home-hero-subtitle">
+        Premium Christian apparel forged in purpose, spiritual warfare &amp; redemption.
+        <br class="home-hero-br-hide">
+        Represent Christ. Every. Single. Day.
+      </h3>
+
+      <!-- Micro-Copy Tags -->
+      <div class="home-hero-tags" aria-hidden="true">
+        <span class="home-hero-tag">Walk By Faith</span>
+        <span class="home-hero-tag-dot">·</span>
+        <span class="home-hero-tag">Created With Purpose</span>
+        <span class="home-hero-tag-dot">·</span>
+        <span class="home-hero-tag">Victory</span>
+      </div>
+
+      <!-- CTAs -->
+      <div class="home-hero-ctas">
+        <a href="/shop" class="home-hero-btn-primary">
+          <span>Explore The Movement</span>
+          <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <a href="/mission" class="home-hero-btn-secondary">Our Mission</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Divider: torn smoke transition to next light section -->
+  <div class="home-hero-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,48 Q60,38 120,52 T240,44 Q300,50 360,40 T480,46 Q540,42 600,50 T720,40 Q780,46 840,38 T960,44 Q1020,50 1080,40 T1200,46 Q1260,42 1320,50 T1440,44 L1440,90 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+
+</section>
+
+    <section class="featured-products-section" id="featured-products" data-zappy-dynamic="true">
+      <div class="container">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="product-grid featured-grid" id="zappy-featured-products">
+          <div class="loading-products">Loading products...</div>
+        </div>
+        <div class="view-all-products">
+          <a href="/products" class="btn btn-primary">View All Courses →</a>
+        </div>
+      </div>
+    </section>
+  
+
+    <section class="featured-categories-section" id="featured-categories" data-zappy-dynamic="true">
+      <div class="container">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="category-blocks" id="zappy-featured-categories">
+          <div class="loading-categories">Loading products...</div>
+        </div>
+      </div>
+    </section>
+  
+
+<section data-band-index="1" class="home-showcase-section" data-layout-spec="Home-showcase">
+  <!-- Grain texture overlay -->
+  <div class="home-showcase-grain" aria-hidden="true"></div>
+
+  <div class="home-showcase-container">
+
+    <!-- LEFT: Content Column -->
+    <div class="home-showcase-content">
+      <div class="home-showcase-eyebrow">
+        <span class="home-showcase-rule"></span>
+        <span class="home-showcase-label">Christian Apparel</span>
+      </div>
+
+      <h2 class="home-showcase-heading">Built For Bold<br>Representation.</h2>
+
+      <p class="home-showcase-intro">Elevated essentials engineered to carry your faith into everyday life — from the block to the boardroom. Every piece is a declaration. Every thread, a testimony. Set apart style was never meant to stay quiet.</p>
+
+      <blockquote class="home-showcase-scripture">
+        <span class="home-showcase-verse">“For I am not ashamed of the gospel.”</span>
+        <cite class="home-showcase-cite">Romans 1:16</cite>
+      </blockquote>
+
+      <div class="home-showcase-cta-group">
+        <a href="/collections" class="home-showcase-btn-primary">Shop All Collections</a>
+        <a href="/about" class="home-showcase-btn-ghost">Our Mission <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+
+      <!-- Crown of thorns decorative SVG -->
+      <svg class="home-showcase-crown-deco" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="90" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.18"></circle>
+        <circle cx="100" cy="100" r="72" stroke="currentColor" stroke-width="1" opacity="0.1"></circle>
+        <path d="M30 110 Q50 80 70 100 Q90 120 100 90 Q110 60 130 85 Q150 110 170 100" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.2"></path>
+        <path d="M40 125 Q60 95 80 115 Q100 135 120 105 Q140 75 160 110" stroke="currentColor" stroke-width="1" fill="none" opacity="0.12"></path>
+        <!-- thorn spikes -->
+        <line x1="100" y1="10" x2="100" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.2"></line>
+        <line x1="140" y1="20" x2="130" y2="38" stroke="currentColor" stroke-width="1.5" opacity="0.2"></line>
+        <line x1="60" y1="20" x2="70" y2="38" stroke="currentColor" stroke-width="1.5" opacity="0.2"></line>
+        <line x1="170" y1="60" x2="152" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.2"></line>
+        <line x1="30" y1="60" x2="48" y2="68" stroke="currentColor" stroke-width="1.5" opacity="0.2"></line>
+      </svg>
+    </div>
+
+    <!-- RIGHT: Product Category Grid -->
+    <div class="home-showcase-grid">
+
+      <!-- Tile 1: T-Shirts -->
+      <article class="home-showcase-tile home-showcase-tile--wide">
+        <div class="home-showcase-tile-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-1" data-context="Premium Christian streetwear T-shirt lifestyle photo — a young man wearing a bold black oversized tee with a dripping cross graphic and Walk By Faith text, shot in moody cinematic lighting against a concrete urban wall, editorial fashion photography style, luxury streetwear brand aesthetic" width="600" height="750" src="/assets/site-home-showcase-image-1.webp" alt="Holy Drip Co. T-Shirts — Walk By Faith collection">
+          <!-- Crown of thorns card accent -->
+          <svg class="home-showcase-tile-accent" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="20" r="60" stroke="white" stroke-width="1" stroke-dasharray="3 5" opacity="0.12"></circle>
+            <path d="M60 0 Q80 15 100 5 Q115 20 110 40" stroke="white" stroke-width="1" fill="none" opacity="0.15"></path>
+          </svg>
+          <div class="home-showcase-tile-overlay"></div>
+        </div>
+        <div class="home-showcase-tile-body">
+          <span class="home-showcase-tile-category">01</span>
+          <h3 class="home-showcase-tile-title">T-Shirts</h3>
+          <p class="home-showcase-tile-mood">Statement staples</p>
+          <a href="/collections/t-shirts" class="home-showcase-tile-link">Explore <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+      <!-- Tile 2: Hoodies -->
+      <article class="home-showcase-tile">
+        <div class="home-showcase-tile-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-2" data-context="Premium Christian streetwear hoodie campaign photo — a person wearing a heavyweight dark charcoal hoodie with a crown of thorns embroidered graphic and scripture overlay text, dramatic low-key studio lighting, luxury fashion editorial, faith-based urban streetwear brand" width="600" height="750" src="/assets/site-home-showcase-image-2.webp" alt="Holy Drip Co. Hoodies — heavyweight faith collection">
+          <div class="home-showcase-tile-overlay"></div>
+        </div>
+        <div class="home-showcase-tile-body">
+          <span class="home-showcase-tile-category">02</span>
+          <h3 class="home-showcase-tile-title">Hoodies</h3>
+          <p class="home-showcase-tile-mood">Heavyweight conviction</p>
+          <a href="/collections/hoodies" class="home-showcase-tile-link">Explore <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+      <!-- Tile 3: Hats -->
+      <article class="home-showcase-tile">
+        <div class="home-showcase-tile-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-3" data-context="Premium Christian streetwear hat lifestyle photo — a stylish snapback or dad hat with a minimalist cross logo and Created With Purpose text, worn by a young person in golden hour outdoor lighting, editorial fashion photography, faith-driven urban brand aesthetic" width="600" height="750" src="/assets/site-home-showcase-image-3.webp" alt="Holy Drip Co. Hats — crowned daily collection">
+          <div class="home-showcase-tile-overlay"></div>
+        </div>
+        <div class="home-showcase-tile-body">
+          <span class="home-showcase-tile-category">03</span>
+          <h3 class="home-showcase-tile-title">Hats</h3>
+          <p class="home-showcase-tile-mood">Crowned daily</p>
+          <a href="/collections/hats" class="home-showcase-tile-link">Explore <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+      <!-- Tile 4: Accessories -->
+      <article class="home-showcase-tile">
+        <div class="home-showcase-tile-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-4" data-context="Premium Christian streetwear accessories flat lay — cross pendant necklace, woven wristband with scripture text, and branded tote bag arranged on a textured cream linen surface, cinematic overhead product photography, luxury faith-based brand, Holy Drip Co." width="600" height="750" src="/assets/site-home-showcase-image-4.webp" alt="Holy Drip Co. Accessories — details with meaning">
+          <div class="home-showcase-tile-overlay"></div>
+        </div>
+        <div class="home-showcase-tile-body">
+          <span class="home-showcase-tile-category">04</span>
+          <h3 class="home-showcase-tile-title">Accessories</h3>
+          <p class="home-showcase-tile-mood">Details with meaning</p>
+          <a href="/collections/accessories" class="home-showcase-tile-link">Explore <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+      <!-- Tile 5: Limited Drops -->
+      <article class="home-showcase-tile home-showcase-tile--featured">
+        <div class="home-showcase-tile-img-wrap">
+          <img loading="lazy" decoding="async" data-placeholder="home-showcase-image-5" data-context="Holy Drip Co. limited drop campaign photo — a dramatic full-bleed editorial image of a model in an exclusive Not Today Satan limited edition all-black outfit with gold foil dripping cross print, cinematic atmospheric fog and violet light beams, luxury streetwear campaign photography, faith-driven movement brand" width="600" height="750" src="/assets/site-home-showcase-image-5.webp" alt="Holy Drip Co. Limited Drops — released with intention">
+          <div class="home-showcase-tile-overlay home-showcase-tile-overlay--deep"></div>
+          <div class="home-showcase-tile-badge">Limited</div>
+        </div>
+        <div class="home-showcase-tile-body">
+          <span class="home-showcase-tile-category">05</span>
+          <h3 class="home-showcase-tile-title">Limited Drops</h3>
+          <p class="home-showcase-tile-mood">Released with intention</p>
+          <a href="/collections/limited-drops" class="home-showcase-tile-link home-showcase-tile-link--accent">View Drop <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Bottom metallic curve divider -->
+  <div class="home-showcase-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hsc-divider-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="var(--bg-dark)" stop-opacity="1"></stop>
+          <stop offset="30%" stop-color="var(--bg-dark)" stop-opacity="1"></stop>
+          <stop offset="50%" stop-color="var(--bg-dark)" stop-opacity="1"></stop>
+          <stop offset="70%" stop-color="var(--bg-dark)" stop-opacity="1"></stop>
+          <stop offset="100%" stop-color="var(--bg-dark)" stop-opacity="1"></stop>
+        </linearGradient>
+        <filter id="hsc-glow-filter">
+          <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
+        </filter>
+      </defs>
+      <!-- Glow line -->
+      <path d="M0,45 Q180,10 360,35 Q540,60 720,28 Q900,0 1080,32 Q1260,58 1440,30" stroke="rgba(124,58,237,0.35)" stroke-width="2" fill="#0D0E14" filter="url(#hsc-glow-filter)"></path>
+      <path d="M0,45 Q180,10 360,35 Q540,60 720,28 Q900,0 1080,32 Q1260,58 1440,30" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="#0D0E14"></path>
+      <!-- Dark fill to next section -->
+      <path d="M0,90 L0,45 Q180,10 360,35 Q540,60 720,28 Q900,0 1080,32 Q1260,58 1440,30 L1440,90 Z" fill="#0D0E14"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section data-band-index="2" class="home-quotes-section" data-layout-spec="Home-quotes">
+
+  <!-- Background decorative layers -->
+  <div class="hqs-bg-noise" aria-hidden="true"></div>
+  <div class="hqs-bg-rays" aria-hidden="true"></div>
+
+  <!-- Thorn circle SVG motif (top-right corner) -->
+  <svg class="hqs-thorn-motif" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="140" cy="140" r="110" fill="none" stroke="#FF4FA3" stroke-width="1" stroke-dasharray="6 8" opacity="0.18"></circle>
+    <circle cx="140" cy="140" r="90" fill="none" stroke="#FF4FA3" stroke-width="0.5" stroke-dasharray="3 12" opacity="0.12"></circle>
+    <g opacity="0.14" stroke="#FF4FA3" stroke-width="0.8" fill="none">
+      <path d="M140,30 Q148,42 140,54 Q132,42 140,30"></path>
+      <path d="M140,226 Q148,238 140,250 Q132,238 140,226"></path>
+      <path d="M30,140 Q42,148 54,140 Q42,132 30,140"></path>
+      <path d="M226,140 Q238,148 250,140 Q238,132 226,140"></path>
+      <path d="M68,68 Q79,75 74,86 Q63,79 68,68"></path>
+      <path d="M206,194 Q217,201 212,212 Q201,205 206,194"></path>
+      <path d="M68,212 Q79,205 74,194 Q63,201 68,212"></path>
+      <path d="M206,86 Q217,79 212,68 Q201,75 206,86"></path>
+    </g>
+  </svg>
+
+  <div class="hqs-container">
+
+    <!-- Intro Block -->
+    <div class="hqs-intro">
+      <span class="hqs-eyebrow">Holy Drip Co. — Christian Apparel</span>
+      <h2 class="hqs-heading">Words To Wear.<br>Truth To Live.</h2>
+      <p class="hqs-subtext">Every design begins as a declaration before it becomes apparel. These aren't just phrases — they are battle cries, scripture-rooted convictions, and set apart style statements for those who wear their faith without apology.</p>
+      <div class="hqs-divider-rule" aria-hidden="true"></div>
+    </div>
+
+    <!-- Three Quote Cards Grid -->
+    <div class="hqs-grid">
+
+      <!-- Card 1: Walk By Faith -->
+      <article class="hqs-card hqs-card--tall">
+        <div class="hqs-card-thorn" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,79,163,0.15)" stroke-width="1" stroke-dasharray="4 7"></circle>
+            <circle cx="60" cy="60" r="38" fill="none" stroke="rgba(255,79,163,0.08)" stroke-width="0.5" stroke-dasharray="2 9"></circle>
+          </svg>
+        </div>
+        <div class="hqs-card-inner">
+          <span class="hqs-card-tag">Signature Drop</span>
+          <blockquote class="hqs-quote">
+            <span class="hqs-quote-mark" aria-hidden="true">“</span>
+            <p class="hqs-quote-text">Walk By Faith</p>
+            <span class="hqs-quote-mark hqs-quote-mark--close" aria-hidden="true">”</span>
+          </blockquote>
+          <p class="hqs-card-body">Not by sight. Not by circumstance. Not by comfort. Step forward when the path is unclear — that is where faith lives.</p>
+          <cite class="hqs-reference">2 Corinthians 5:7 — KJV</cite>
+        </div>
+        <div class="hqs-card-accent-line" aria-hidden="true"></div>
+      </article>
+
+      <!-- Card 2: Not Today Satan -->
+      <article class="hqs-card hqs-card--accent">
+        <div class="hqs-card-thorn" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(124,58,237,0.2)" stroke-width="1" stroke-dasharray="4 7"></circle>
+            <circle cx="60" cy="60" r="38" fill="none" stroke="rgba(124,58,237,0.1)" stroke-width="0.5" stroke-dasharray="2 9"></circle>
+          </svg>
+        </div>
+        <div class="hqs-card-inner">
+          <span class="hqs-card-tag hqs-card-tag--violet">Spiritual Warfare</span>
+          <blockquote class="hqs-quote">
+            <span class="hqs-quote-mark" aria-hidden="true">“</span>
+            <p class="hqs-quote-text">Not Today Satan</p>
+            <span class="hqs-quote-mark hqs-quote-mark--close" aria-hidden="true">”</span>
+          </blockquote>
+          <p class="hqs-card-body">Put on the full armor of God. Stand firm. The enemy has no authority over the life you carry in Christ.</p>
+          <cite class="hqs-reference">Ephesians 6:11 — ESV</cite>
+        </div>
+        <div class="hqs-card-accent-line hqs-card-accent-line--violet" aria-hidden="true"></div>
+      </article>
+
+      <!-- Card 3: Romans 8:37 -->
+      <article class="hqs-card hqs-card--verse">
+        <div class="hqs-card-thorn" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,79,163,0.12)" stroke-width="1" stroke-dasharray="4 7"></circle>
+            <circle cx="60" cy="60" r="38" fill="none" stroke="rgba(255,79,163,0.06)" stroke-width="0.5" stroke-dasharray="2 9"></circle>
+          </svg>
+        </div>
+        <div class="hqs-card-inner">
+          <span class="hqs-card-tag">Scripture</span>
+          <blockquote class="hqs-quote">
+            <span class="hqs-quote-mark" aria-hidden="true">“</span>
+            <p class="hqs-quote-text">We are more than conquerors through Him who loved us.</p>
+            <span class="hqs-quote-mark hqs-quote-mark--close" aria-hidden="true">”</span>
+          </blockquote>
+          <p class="hqs-card-body">You were not created to survive. You were created with purpose — to overcome, to lead, to represent the Kingdom in every room you enter.</p>
+          <cite class="hqs-reference">Romans 8:37 — NIV</cite>
+        </div>
+        <div class="hqs-card-accent-line" aria-hidden="true"></div>
+      </article>
+
+    </div>
+    <!-- End Grid -->
+
+  </div>
+  <!-- End Container -->
+
+  <!-- Bottom divider: angled violet-to-charcoal -->
+  <div class="hqs-divider-wrapper" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hqs-div-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.85"></stop>
+          <stop offset="50%" stop-color="#3A1F6E" stop-opacity="0.9"></stop>
+          <stop offset="100%" stop-color="#22232B" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,80 L0,52 L1440,18 L1440,80 Z" fill="#0e0f18"></path>
+      <path d="M0,80 L0,58 L1440,26 L1440,80 Z" fill="#0e0f18"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section data-band-index="3" class="home-features-section" data-layout-spec="Home-features">
+  <!-- Scripture texture overlay -->
+  <div class="hf-texture" aria-hidden="true"></div>
+
+  <!-- Intro Block -->
+  <div class="hf-container">
+    <div class="hf-intro">
+      <span class="hf-eyebrow">Christian Apparel</span>
+      <h2 class="hf-heading">The Message<br>In The Design.</h2>
+      <p class="hf-intro-body">Every piece we create carries a narrative. These aren't just graphics on fabric — they are declarations of faith, reminders of grace, and armor for the everyday believer. Set apart style, worn with conviction.</p>
+      <div class="hf-intro-rule" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- Campaign Panels Grid -->
+  <div class="hf-container">
+    <div class="hf-panels-grid">
+
+      <!-- Panel 1: Blessings In The Lesson — image-dominant -->
+      <article class="hf-panel hf-panel--image-left">
+        <div class="hf-panel-image-wrap">
+          <!-- Crown of thorns decorative motif -->
+          <svg class="hf-crown-motif" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#FFFFFF" stroke-width="1.2"></circle>
+            <path d="M20,60 Q25,45 35,55 Q40,35 50,48 Q55,30 60,45 Q65,30 70,48 Q80,35 85,55 Q95,45 100,60" fill="none" stroke="#FFFFFF" stroke-width="1.2"></path>
+            <path d="M35,55 L32,70 M50,48 L48,65 M60,45 L60,62 M70,48 L72,65 M85,55 L88,70" fill="none" stroke="#FFFFFF" stroke-width="1"></path>
+          </svg>
+          <img loading="lazy" decoding="async" data-placeholder="home-features-image-1" data-context="Premium Christian streetwear lifestyle photo: a young Black man wearing a cream-colored oversized graphic tee with a dripping cross and the text BLESSINGS IN THE LESSON, standing in moody urban environment with dramatic side lighting, cinematic editorial mood, faith-driven streetwear aesthetic" width="600" height="750" src="/assets/site-home-features-image-1.webp" alt="There Are Blessings In The Lesson — Holy Drip Co. Christian streetwear tee">
+          <div class="hf-panel-image-overlay" aria-hidden="true"></div>
+          <div class="hf-panel-number" aria-hidden="true">01</div>
+        </div>
+        <div class="hf-panel-copy">
+          <span class="hf-panel-tag">Featured Narrative</span>
+          <h3 class="hf-panel-title">There Are Blessings<br>In The Lesson</h3>
+          <p class="hf-panel-meaning">Every trial carries a hidden gift — this design is a reminder that suffering is not the end of the story.</p>
+          <p class="hf-panel-intention">Designed to feel like a quiet declaration worn on the hardest days. A piece that says: I've been through it, and I'm still here.</p>
+          <a href="/collections/blessings" class="hf-panel-cta">Explore The Drop <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+      <!-- Panel 2: His Story — copy-dominant -->
+      <article class="hf-panel hf-panel--copy-left">
+        <div class="hf-panel-copy hf-panel-copy--dark">
+          <span class="hf-panel-tag hf-panel-tag--light">Featured Narrative</span>
+          <h3 class="hf-panel-title hf-panel-title--light">His Story</h3>
+          <p class="hf-panel-meaning hf-panel-meaning--light">The greatest redemption arc ever written — and you are a chapter in it. This design centers the cross as the turning point of all human history.</p>
+          <p class="hf-panel-intention hf-panel-intention--light">Built for those who carry the Gospel as identity. Wearing this is an act of witness — quiet, bold, and unmistakable.</p>
+          <a href="/collections/his-story" class="hf-panel-cta hf-panel-cta--accent">Explore The Drop <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+        <div class="hf-panel-image-wrap hf-panel-image-wrap--dark">
+          <!-- Cross watermark -->
+          <svg class="hf-cross-watermark" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+            <rect x="85" y="0" width="30" height="260" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.12"></rect>
+            <rect x="0" y="80" width="200" height="30" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.12"></rect>
+          </svg>
+          <img loading="lazy" decoding="async" data-placeholder="home-features-image-2" data-context="Premium Christian streetwear editorial: a close-up of a dark navy hoodie with HIS STORY embroidered in oversized serif letters, worn by a young woman with natural hair in a cinematic low-lit studio, dramatic shadows, gold accent lighting, faith-based luxury streetwear brand aesthetic" width="600" height="750" src="/assets/site-home-features-image-2.webp" alt="His Story — Holy Drip Co. Christian streetwear hoodie editorial">
+          <div class="hf-panel-image-overlay hf-panel-image-overlay--dark" aria-hidden="true"></div>
+          <div class="hf-panel-number hf-panel-number--light" aria-hidden="true">02</div>
+        </div>
+      </article>
+
+      <!-- Panel 3: Created With Purpose -->
+      <article class="hf-panel hf-panel--image-left hf-panel--accent">
+        <div class="hf-panel-image-wrap">
+          <svg class="hf-crown-motif hf-crown-motif--bottom" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#FF4FA3" stroke-width="0.8" opacity="0.3"></circle>
+            <circle cx="60" cy="60" r="40" fill="none" stroke="#7C3AED" stroke-width="0.6" opacity="0.2"></circle>
+          </svg>
+          <img loading="lazy" decoding="async" data-placeholder="home-features-image-3" data-context="Holy Drip Co. Christian streetwear lifestyle photo: a young Latino man wearing a cream oversized graphic tee reading CREATED WITH PURPOSE in bold uppercase, standing in golden hour light in an urban setting, powerful confident pose, faith-based streetwear editorial, luxury brand photography" width="600" height="750" src="/assets/site-home-features-image-3.webp" alt="Created With Purpose — Holy Drip Co. faith-based streetwear tee">
+          <div class="hf-panel-image-overlay" aria-hidden="true"></div>
+          <div class="hf-panel-number" aria-hidden="true">03</div>
+        </div>
+        <div class="hf-panel-copy">
+          <span class="hf-panel-tag">Featured Narrative</span>
+          <h3 class="hf-panel-title">Created With<br>Purpose</h3>
+          <p class="hf-panel-meaning">You were not an accident. You were intentionally, fearfully, and wonderfully made — this design is a daily reminder of that truth.</p>
+          <p class="hf-panel-intention">For the believer who needs to hear it again: your existence is not random. Your life has weight, direction, and divine intention behind it.</p>
+          <a href="/collections/purpose" class="hf-panel-cta">Explore The Drop <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </article>
+
+      <!-- Panel 4: Spiritual Warfare — full-width cinematic -->
+      <article class="hf-panel hf-panel--fullwidth">
+        <div class="hf-panel-fw-image">
+          <img loading="lazy" decoding="async" data-placeholder="home-features-image-4" data-context="Holy Drip Co. Christian streetwear campaign: dramatic wide cinematic shot of a group of young diverse believers wearing dark hoodies and streetwear with bold faith graphics including armor of God and spiritual warfare imagery, dramatic purple and rose light rays breaking through storm clouds, powerful movement energy, luxury editorial fashion photography" width="1200" height="600" src="/assets/site-home-features-image-4.webp" alt="Armor of God — Holy Drip Co. spiritual warfare collection campaign">
+          <div class="hf-panel-fw-overlay" aria-hidden="true"></div>
+        </div>
+        <div class="hf-panel-fw-content">
+          <div class="hf-panel-fw-inner">
+            <span class="hf-panel-tag hf-panel-tag--light">Featured Narrative</span>
+            <h3 class="hf-panel-title hf-panel-title--light hf-panel-title--xl">Armor On.<br>Faith Lived.</h3>
+            <p class="hf-panel-meaning hf-panel-meaning--light">Put on the full armor of God. This collection is built around endurance, bold witness, and spiritual warfare — designed for those who understand that faith is not passive.</p>
+            <p class="hf-panel-intention hf-panel-intention--light">Wear it like a warrior. Live it like a testimony. This is more than Christian apparel — this is a declaration that you are set apart.</p>
+            <a href="/collections/armor" class="hf-panel-cta hf-panel-cta--light">Explore The Drop <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+          <div class="hf-panel-fw-number" aria-hidden="true">04</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <!-- Bottom gradient dissolve divider -->
+  <div class="hf-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,80 L0,48 Q120,36 240,52 T480,44 Q600,52 720,40 T960,48 Q1080,36 1200,50 T1440,44 L1440,80 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+</section>
+
+<section data-band-index="4" class="home-cta-section" data-layout-spec="Home-cta">
+
+  <!-- Decorative: luminous ice glow halo -->
+  <div class="home-cta-section__halo" aria-hidden="true"></div>
+
+  <!-- Decorative: subtle cross watermark -->
+  <svg class="home-cta-section__cross-watermark" data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="85" y="0" width="30" height="260" rx="0" fill="currentColor"></rect>
+    <rect x="0" y="80" width="200" height="30" rx="0" fill="currentColor"></rect>
+  </svg>
+
+  <div class="home-cta-section__container">
+
+    <!-- Eyebrow label -->
+    <p class="home-cta-section__eyebrow">Holy Drip Co. — Christian Apparel</p>
+
+    <!-- Main heading -->
+    <h2 class="home-cta-section__heading">Join The Movement.</h2>
+
+    <!-- Divider rule -->
+    <div class="home-cta-section__rule" aria-hidden="true"></div>
+
+    <!-- Body paragraph -->
+    <p class="home-cta-section__body">Be the first to know about exclusive drop announcements, limited-edition releases, and new campaign launches. We share encouragement, community updates, giveaways, and rewards for those who represent faith boldly. This is more than clothing — it’s a calling. <em>Set apart style</em> for those who walk by faith, not by sight.</p>
+
+    <!-- Supporting line -->
+    <p class="home-cta-section__subline">Join thousands standing boldly in faith — earning rewards, unlocking early access, and supporting outreach with every purchase.</p>
+
+    <!-- CTA buttons -->
+    <div class="home-cta-section__ctas">
+      <a href="/about" class="home-cta-section__btn home-cta-section__btn--primary">Read Our Story</a>
+      <a href="/contact" class="home-cta-section__btn home-cta-section__btn--secondary">Get In Touch</a>
+    </div>
+
+    <!-- Bottom badge strip -->
+    <div class="home-cta-section__badges">
+      <span class="home-cta-section__badge"><i class="fas fa-cross" aria-hidden="true"></i>&nbsp; Faith Is Not Worn. It’s Lived.</span>
+      <span class="home-cta-section__badge-sep" aria-hidden="true">—</span>
+      <span class="home-cta-section__badge"><i class="fas fa-crown" aria-hidden="true"></i>&nbsp; Created With Purpose.</span>
+      <span class="home-cta-section__badge-sep" aria-hidden="true">—</span>
+      <span class="home-cta-section__badge"><i class="fas fa-dove" aria-hidden="true"></i>&nbsp; Walk By Faith.</span>
+    </div>
+
+  </div>
+
+</section>
+  </main>
+  
+  <footer class="site-footer" aria-label="Site Footer"> <div class="footer-top"> <div class="footer-container"> <div class="footer-grid"> <!-- Column 1: Company Info --> <div class="footer-col footer-col--brand"> <a href="/" class="footer-logo-link" aria-label="Holy Drip Co. Home"> <img src="/assets/holy-drip-co-e-commerce-fashion-apparel-logo.webp" alt="Holy Drip Co." class="logo"> </a> <p class="footer-tagline">Dressed in conviction.<br>Built for the movement.</p> <p class="footer-blurb">Holy Drip Co. is more than a brand — it's a declaration. Premium streetwear forged at the intersection of faith, culture, and purpose. Wear the testimony.</p> <div class="footer-badges"> <span class="badge"><i class="fas fa-shipping-fast"></i> Free Shipping Over $75</span> <span class="badge"><i class="fas fa-headset"></i> 24/7 Support</span> </div> </div> <!-- Column 2: Quick Links --> <div class="footer-col footer-col--links"> <h3 class="footer-heading"><span class="heading-accent"></span>Quick Links</h3> <ul class="footer-nav"> <li><a href="/">Home</a></li> <li><a href="/brand-story">Brand Story</a></li> <li><a href="/campaigns">Campaigns</a></li> <li><a href="/community">Community</a></li> <li><a href="/contact">Contact</a></li> </ul> </div> <!-- Column 3: Contact Info --> <div class="footer-col footer-col--contact"> <h3 class="footer-heading"><span class="heading-accent"></span>Get In Touch</h3> <ul class="footer-contact"> <li> <span class="contact-icon"><i class="fas fa-envelope"></i></span> <span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span> </li> <li> <span class="contact-icon"><i class="fas fa-phone"></i></span> <span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span> </li> <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span> <span class="contact-text">[business_address]</span></a></li> </ul> </div> <!-- Column 4: Social & Newsletter --> <div class="footer-col footer-col--social"> <h3 class="footer-heading"><span class="heading-accent"></span>Follow The Movement</h3> <p class="footer-social-desc">Join the community. Walk in purpose.</p> <div class="footer-social-links">    </div> <div class="footer-newsletter"> <p class="newsletter-label">Join The Inner Circle</p> <form class="newsletter-form" onsubmit="return false;" aria-label="Newsletter signup"> <input type="email" placeholder="Your email address" aria-label="Email address for newsletter" class="newsletter-input"> <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">GO</button> </form> </div> </div> </div> </div> </div> <!-- Divider --> <div class="footer-divider-wrap"> <div class="footer-container"> <div class="footer-divider"></div> </div> </div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-container"> <div class="footer-bottom-inner"> <p class="footer-copyright">© 2026 Holy Drip Co.. All rights reserved.</p> <div class="footer-legal"> <a href="/privacy">Privacy Policy</a> <span class="legal-sep" aria-hidden="true">/</span> <a href="/terms">Terms &amp; Conditions</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="Return Policy">
+              Return Policy
+            </a> <span class="legal-sep" aria-hidden="true">/</span> <a href="/accessibility">Accessibility</a> <span class="legal-sep" aria-hidden="true">/</span> <a href="https://zappy5.com" target="_blank" class="zappy-attribution" rel="noopener noreferrer">Generated by Zappy</a> </div> </div> </div> </div> </footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script id="zappy-navbar-scroll-effect">
+    (function(){
+      var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');
+      var cm=document.querySelector('.zappy-catalog-menu,#zappy-catalog-menu');
+      if(!nb)return;
+      var fb='rgba(246,241,232,0.85)';
+      var th=60;
+      var rs=getComputedStyle(document.documentElement);
+      var td=rs.getPropertyValue('--text-dark').trim()||'#1a1a1a';
+      var tl=rs.getPropertyValue('--text-light').trim()||'#ffffff';
+      var st=true?td:tl;
+      nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';
+      if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';
+      var neSel='a,.navbar-brand,.navbar-brand a,.dropdown-toggle,.mobile-toggle,.phone-header-btn,.mobile-hamburger-btn,.mobile-close-btn,.mobile-submenu-toggle,.nav-link';
+      var skipCls=['cart-link','login-link','nav-search-toggle','search-toggle'];
+      function sTC(c,clr){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){var sk=false;if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu')){sk=true;}for(var j=0;j<skipCls.length;j++){if(els[i].classList.contains(skipCls[j])){sk=true;break;}}if(!sk)els[i].style.setProperty('color',clr,'important');}}
+      function cTC(c){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu'))continue;els[i].style.removeProperty('color');}}
+      function applyScrolled(){
+        nb.classList.add('scrolled');
+        if(window.innerWidth>768){
+          nb.style.setProperty('--frosted-text',st);
+          nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('background-color',fb,'important');
+          nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+        }
+        if(cm){cm.classList.add('scrolled');if(window.innerWidth>768){cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}}
+      }
+      function onS(){
+        if(window._zappyNavNoDarkHero) return;
+        if(window.innerWidth<=768){nb.classList.remove('scrolled');cTC(nb);if(cm){cm.classList.remove('scrolled');cTC(cm);}return;}
+        var y=window.scrollY||window.pageYOffset;
+        if(y>th){
+          nb.classList.add('scrolled');nb.style.setProperty('background-color',fb,'important');nb.style.setProperty('background-image','none','important');
+          nb.style.setProperty('--frosted-text',st);nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
+          sTC(nb,st);
+          if(cm){cm.classList.add('scrolled');cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}
+        }else{
+          nb.classList.remove('scrolled');nb.style.setProperty('background-color','transparent','important');nb.style.removeProperty('background-image');
+          nb.style.removeProperty('--frosted-text');nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';
+          cTC(nb);
+          if(cm){cm.classList.remove('scrolled');cm.style.setProperty('background','transparent','important');cm.style.setProperty('backdrop-filter','none','important');cm.style.setProperty('-webkit-backdrop-filter','none','important');cTC(cm);}
+        }
+      }
+      function sLum(rv,gv,bv){rv/=255;gv/=255;bv/=255;rv=rv<=0.03928?rv/12.92:Math.pow((rv+0.055)/1.055,2.4);gv=gv<=0.03928?gv/12.92:Math.pow((gv+0.055)/1.055,2.4);bv=bv<=0.03928?bv/12.92:Math.pow((bv+0.055)/1.055,2.4);return 0.2126*rv+0.7152*gv+0.0722*bv;}
+      window.addEventListener('scroll',onS,{passive:true});
+      window.addEventListener('resize',onS,{passive:true});
+      onS();
+      var heroEl=document.querySelector('section[class*="hero"],[data-hero-type],main:not(.courses-page-main)>section:first-child');
+      var hasDH=false;
+      if(heroEl){var hCs=getComputedStyle(heroEl);var hBI=hCs.backgroundImage;if(hBI&&hBI!=='none'){if(hBI.indexOf('url(')!==-1){var hM2=hCs.backgroundColor.match(/\d+/g);if(hM2&&hM2.length>=3){hasDH=sLum(parseInt(hM2[0]),parseInt(hM2[1]),parseInt(hM2[2]))<0.4;}else{hasDH=true;}}else if(hBI.indexOf('gradient')!==-1){var cM=hBI.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g);if(cM&&cM.length>0){var tLm=0;for(var ci=0;ci<cM.length;ci++){var pts=cM[ci].match(/\d+/g);tLm+=sLum(parseInt(pts[0]),parseInt(pts[1]),parseInt(pts[2]));}hasDH=(tLm/cM.length)<0.4;}else{hasDH=true;}}else{hasDH=true;}}else{var hM=hCs.backgroundColor.match(/\d+/g);if(hM&&hM.length>=3){hasDH=sLum(parseInt(hM[0]),parseInt(hM[1]),parseInt(hM[2]))<0.4;}}}
+      if(!hasDH){window.removeEventListener('scroll',onS);window.removeEventListener('resize',onS);applyScrolled();window._zappyNavNoDarkHero=true;}
+    })();
+    </script>
+</body>
+</html>

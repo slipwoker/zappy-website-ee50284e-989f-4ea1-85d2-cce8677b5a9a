@@ -1,0 +1,105 @@
+# Holy Drip Co. — Generative Engine Optimization Map
+
+> Holy Drip Co. is a premium Christian streetwear brand that fuses luxury urban fashion with bold faith-based identity — designed to feel like a cross between a high-end streetwear label and a modern worship movement. The brand is built around themes of spiritual warfare, purpose, redemption, and representing Christ confidently in everyday life, with signature design concepts like 'Walk By Faith,' 'Not Today Satan,' and 'Created With Purpose.' Visually, it blends dripping cross iconography, crown of thorns motifs, scripture overlays, and cinematic atmospheric effects to create an emotionally powerful, inspirational experience that makes customers feel they are joining a movement — not just buying clothing.
+
+---
+
+## Pages
+
+### Home
+https://example.com
+Holy Drip Co. is the Christian apparel brand built for the bold. Premium streetwear fused with faith — shop the movement and set apart style today.
+
+### Brand Story
+https://example.com/brand-story
+Discover the vision behind Holy Drip Co. — a Christian apparel movement where faith is not worn, it&#39;s lived. Read the story that started a spiritual fashion revolution.
+
+### Campaigns
+https://example.com/campaigns
+Explore Holy Drip Co. campaigns built around spiritual warfare, redemption, and Set apart style. Every collection tells a story — find yours and step into the mission.
+
+### Community
+https://example.com/community
+You are not just a customer — you are the movement. Connect with a global community of faith-driven individuals living proof that faith is not worn, it&#39;s lived out loud.
+
+### Contact
+https://example.com/contact
+Have a question, collab idea, or calling on your heart? Reach out to Holy Drip Co. and connect with a Christian apparel brand that actually stands for something greater.
+
+### Products
+https://example.com/products
+Our Products - Holy Drip Co.
+
+### Cart
+https://example.com/cart
+Your Cart
+
+### Checkout
+https://example.com/checkout
+Checkout
+
+### Login
+https://example.com/login
+Customer Login
+
+### Account
+https://example.com/account
+My Account
+
+### Order Success
+https://example.com/order-success
+Thank you for your order
+
+### Product Detail
+https://example.com/product/:slug
+Product Details - Holy Drip Co.
+
+### Category
+https://example.com/category/:slug
+Products - Holy Drip Co.
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+## Products
+
+_No products are currently configured._
+
+---
+
+# Business Context (for LLM understanding)
+
+## About Holy Drip Co.
+Holy Drip Co. is a premium Christian streetwear brand that fuses luxury urban fashion with bold faith-based identity — designed to feel like a cross between a high-end streetwear label and a modern worship movement. The brand is built around themes of spiritual warfare, purpose, redemption, and representing Christ confidently in everyday life, with signature design concepts like 'Walk By Faith,' 'Not Today Satan,' and 'Created With Purpose.' Visually, it blends dripping cross iconography, crown of thorns motifs, scripture overlays, and cinematic atmospheric effects to create an emotionally powerful, inspirational experience that makes customers feel they are joining a movement — not just buying clothing.
+
+## Target Audience
+- Faith-driven individuals, urban streetwear enthusiasts, Christians who want to represent their faith boldly in everyday life
+- Faith-Driven Urban Youth
+- Christian Community Leaders
+- College Faith Groups
+
+## Industry
+E-commerce / Fashion & Apparel
+
+---
+
+# Machine-readable feeds
+
+- Sitemap (XML): https://example.com/sitemap.xml
+- Robots: https://example.com/robots.txt
+- Flattened page text (for LLMs): https://example.com/llms-full.txt
+- Products (JSON): https://example.com/products.json
+- Products (Google Merchant RSS): https://example.com/product-feed.xml
